@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScanForge — Android technical demo</title>
+    <meta
+      name="description"
+      content="Technical demonstration of ScanForge, an offline Android document scanner: on-device edge detection, perspective correction, OCR and PDF generation."
+    />
+    <!--
+      Indexing: this demo page is kept out of search engines by default.
+      To allow indexing, change the content below to "index, follow".
+      This does not restrict access: anyone with the URL can open the page.
+    -->
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#050b2e" />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <link rel="stylesheet" href="demo.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <span class="brand">
+          <img src="../assets/icon-192.png" alt="" width="36" height="36" />
+          ScanForge
+        </span>
+        <nav class="site-nav" aria-label="Sections">
+          <a class="optional" href="#capabilities">Capabilities</a>
+          <a class="optional" href="#screenshots">Screenshots</a>
+          <a href="#test">How to test</a>
+          <a class="optional" href="#notes">Technical notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <p class="demo-tag">Android application · Technical demonstration</p>
+            <h1>ScanForge</h1>
+            <p class="hero-subtitle">Offline document scanning, OCR and PDF generation for Android</p>
+            <p class="lead">
+              A complete Android application that turns the phone camera into a document scanner. It detects the
+              page, corrects its perspective, applies document filters, recognizes the text and builds multi-page
+              PDF files. All image processing, OCR and PDF generation run on the device; the app does not request
+              Internet access.
+            </p>
+            <div class="actions">
+              <a class="button button-primary" href="https://github.com/franbenaglia/scanForgeLanding/releases/download/v1.1.0/scanforge-v1.1.0.apk" type="application/vnd.android.package-archive"
+                >Download Android APK</a
+              >
+            </div>
+            <p class="fine">Version 1.1.0 · 74 MB · Android 7.0 or later · No account required</p>
+            <p class="checksum">SHA-256: <span class="sha">f1f2e92f93cb0e55b5e640c0f4e0cfb4f6b13207ae97bd91738973c494a570ba</span></p>
+          </div>
+          <figure class="hero-shot">
+            <img
+              src="img/03-crop-900.webp"
+              width="900"
+              height="1821"
+              alt="ScanForge crop editor: a photographed invoice with four draggable corner handles outlining the page"
+            />
+            <figcaption>Crop editor with the detected page outline.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="capabilities">
+        <div class="wrap">
+          <h2>Technical capabilities</h2>
+          <p class="section-lead">What the application implements, and the technology behind each part.</p>
+          <ul class="cards">
+            <li class="card">
+              <h3>Camera capture with live edge detection</h3>
+              <p>
+                Native camera screen built with CameraX. Each preview frame is analyzed with OpenCV to outline the
+                page and to warn about low light, motion or blur.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Perspective correction and filters</h3>
+              <p>
+                OpenCV contour detection, perspective warp and document filters (adaptive threshold, local contrast
+                enhancement, background normalization). The original photo is never overwritten.
+              </p>
+            </li>
+            <li class="card">
+              <h3>On-device OCR</h3>
+              <p>
+                Google ML Kit text recognition with the Latin model bundled in the APK. Detects rotated pages,
+                stores word-level bounding boxes and keeps manual corrections separate from recognized text.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Multi-page PDF generation</h3>
+              <p>
+                A purpose-built streaming PDF writer in Kotlin: one page at a time, JPEG or 1-bit images, A4, Letter
+                or fit-to-page, with three quality profiles.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Local storage and search</h3>
+              <p>
+                SQLite database with versioned migrations for documents, pages, OCR results, folders and tags.
+                Search by name, recognized text, tag or date.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Privacy by design</h3>
+              <p>
+                The only permission is the camera. Images are imported with the Android photo picker and exported
+                with the system file picker, so no storage permission is requested.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="screenshots">
+        <div class="wrap">
+          <h2>Application screenshots</h2>
+          <p class="section-lead">
+            Captured from the application running on an Android 15 phone, using a sample document. Select a
+            screenshot to enlarge it.
+          </p>
+          <ul class="gallery">
+            <li>
+              <figure>
+                <a href="img/01-home-900.webp" data-lightbox data-caption="Document list with folders and search.">
+                  <img src="img/01-home-360.webp" width="360" height="729" loading="lazy"
+                    alt="Home screen: search box, folder chips, New scan and Import images buttons, and one document named Sample invoice" />
+                </a>
+                <figcaption>Document list</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <a href="img/02-document-900.webp" data-lightbox data-caption="Pages of a document with their OCR status; pages can be reordered by dragging.">
+                  <img src="img/02-document-360.webp" width="360" height="729" loading="lazy"
+                    alt="Document editor listing two page thumbnails, each marked Text recognized, with drag handles" />
+                </a>
+                <figcaption>Multi-page document</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <a href="img/03-crop-900.webp" data-lightbox data-caption="Manual crop with four corner handles, re-detection and full-page options.">
+                  <img src="img/03-crop-360.webp" width="360" height="729" loading="lazy"
+                    alt="Crop editor showing the original photo with a highlighted quadrilateral over the page" />
+                </a>
+                <figcaption>Crop editor</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <a href="img/04-filter-900.webp" data-lightbox data-caption="Black and white filter with brightness, contrast and sharpness controls.">
+                  <img src="img/04-filter-360.webp" width="360" height="729" loading="lazy"
+                    alt="Filter screen showing the corrected page in black and white, filter tabs and three sliders" />
+                </a>
+                <figcaption>Document filters</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <a href="img/05-text-900.webp" data-lightbox data-caption="Recognized text below the page image; the text can be edited, searched, copied or shared.">
+                  <img src="img/05-text-360.webp" width="360" height="729" loading="lazy"
+                    alt="Recognized text screen with the page image at the top and the extracted text below" />
+                </a>
+                <figcaption>OCR result</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <a href="img/06-export-900.webp" data-lightbox data-caption="PDF export options with an estimated size before generating the file.">
+                  <img src="img/06-export-360.webp" width="360" height="729" loading="lazy"
+                    alt="Export screen with file name, profile, page size, margins and color options and a summary" />
+                </a>
+                <figcaption>PDF export</figcaption>
+              </figure>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="test">
+        <div class="wrap">
+          <h2>How to test the application</h2>
+          <p class="section-lead">
+            The application is distributed as an APK file for evaluation. Android asks for an extra confirmation
+            when installing apps from outside an app store; no other security setting needs to be changed.
+          </p>
+          <ol class="steps">
+            <li>
+              <strong>Download the APK</strong>
+              <span>On an Android phone, open this page and tap Download Android APK (74 MB).</span>
+            </li>
+            <li>
+              <strong>Open the file</strong>
+              <span>Open the downloaded file from the browser or the file manager.</span>
+            </li>
+            <li>
+              <strong>Allow the installation</strong>
+              <span>
+                Android asks you to allow that browser or file manager to install apps. You can revoke this
+                afterwards in the system settings.
+              </span>
+            </li>
+            <li>
+              <strong>Launch ScanForge</strong>
+              <span>The camera permission is requested the first time you scan.</span>
+            </li>
+          </ol>
+          <p class="note">
+            Requires Android 7.0 or later on an ARM device (arm64-v8a or armeabi-v7a, which covers most phones and
+            tablets). The application works entirely offline: no Internet connection, account or backend is needed.
+            The only hardware used is the rear camera, and it is optional: images can also be imported from the
+            gallery.
+          </p>
+        </div>
+      </section>
+
+      <section id="scenario">
+        <div class="wrap">
+          <h2>Suggested demonstration</h2>
+          <p class="section-lead">Scan a printed document, correct its perspective, extract its text and export a PDF.</p>
+          <ol class="scenario">
+            <li>Optionally, turn on airplane mode to confirm that everything runs offline.</li>
+            <li>Tap New scan and photograph a printed page lying on a contrasting surface; watch the live outline.</li>
+            <li>Capture one or two pages and tap Done. Each page is cropped and straightened automatically.</li>
+            <li>Open a page's menu and choose Crop to adjust the corners, then Filter and adjustments to try the black and white filter.</li>
+            <li>Tap a page thumbnail to see the recognized text; search for a word or correct it.</li>
+            <li>Use the share button of the document to create a PDF, then share it or save it to a folder.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="architecture">
+        <div class="wrap">
+          <h2>Technical architecture</h2>
+          <p class="section-lead">
+            A hybrid application: the interface is a web application packaged with Capacitor, and the image, OCR
+            and PDF work runs in a native Kotlin plugin.
+          </p>
+          <div class="arch" role="img" aria-label="Architecture: the Ionic React interface calls a native Kotlin plugin through the Capacitor bridge, passing file paths; the plugin uses CameraX, OpenCV, ML Kit and a PDF writer; data is kept in SQLite and app-private files.">
+            <p class="arch-label">Interface</p>
+            <div class="arch-row">
+              <div class="arch-box">
+                <strong>Ionic React · TypeScript</strong>
+                <span>Screens, navigation, OCR queue, export options, English and Spanish UI</span>
+              </div>
+              <div class="arch-box">
+                <strong>SQLite</strong>
+                <span>Documents, pages, OCR structure, folders, tags, export history</span>
+              </div>
+            </div>
+            <p class="arch-link">↓ Capacitor 8 bridge · only file paths and parameters cross it, never image data ↓</p>
+            <p class="arch-label">Native Android (Kotlin)</p>
+            <div class="arch-row">
+              <div class="arch-box">
+                <strong>CameraX</strong>
+                <span>Preview, capture and frame analysis</span>
+              </div>
+              <div class="arch-box">
+                <strong>OpenCV 4.14</strong>
+                <span>Edge detection, perspective, filters</span>
+              </div>
+              <div class="arch-box">
+                <strong>ML Kit text recognition</strong>
+                <span>Bundled Latin model, on device</span>
+              </div>
+              <div class="arch-box">
+                <strong>PDF writer</strong>
+                <span>Streaming PDF 1.4 output, one page at a time</span>
+              </div>
+            </div>
+            <p class="arch-link">↓</p>
+            <p class="arch-label">Device</p>
+            <div class="arch-row">
+              <div class="arch-box">
+                <strong>App-private storage</strong>
+                <span>Original photos, processed pages, thumbnails, exports</span>
+              </div>
+              <div class="arch-box">
+                <strong>Android system pickers</strong>
+                <span>Photo picker for import, file picker and share sheet for export</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="notes">
+        <div class="wrap">
+          <h2>Technical notes</h2>
+          <dl class="facts">
+            <dt>Version</dt>
+            <dd>1.1.0 (version code 2)</dd>
+            <dt>Package</dt>
+            <dd><code>com.scanforge.app</code></dd>
+            <dt>Minimum Android</dt>
+            <dd>Android 7.0 (API level 24); built for API level 36</dd>
+            <dt>Architectures</dt>
+            <dd>arm64-v8a and armeabi-v7a, in a single APK</dd>
+            <dt>Internet</dt>
+            <dd>Not required. The app does not request the Internet permission.</dd>
+            <dt>Hardware</dt>
+            <dd>Rear camera, optional (gallery import works without it)</dd>
+            <dt>Permissions</dt>
+            <dd>Camera only</dd>
+            <dt>Interface language</dt>
+            <dd>English, or Spanish when the phone is set to Spanish</dd>
+            <dt>APK size</dt>
+            <dd>74,026,089 bytes (74 MB)</dd>
+            <dt>APK SHA-256</dt>
+            <dd class="sha">f1f2e92f93cb0e55b5e640c0f4e0cfb4f6b13207ae97bd91738973c494a570ba</dd>
+            <dt>Signing certificate SHA-256</dt>
+            <dd class="sha">34:5A:AE:4A:B5:FA:F1:D5:26:46:20:A6:C5:13:B2:88:8E:F0:BC:49:3B:5F:18:A6:73:CE:43:36:A5:69:95:9B</dd>
+          </dl>
+
+          <h3>Limitations</h3>
+          <ul class="scenario">
+            <li>Edge detection can miss the page when paper and background have similar colors, with strong shadows or crumpled paper; the corners can then be adjusted by hand.</li>
+            <li>OCR covers printed text in the Latin alphabet; handwriting is not recognized reliably.</li>
+            <li>PDF files contain one image per page; the text is exported separately and is not searchable inside the PDF.</li>
+            <li>Documents are stored only on the device and are not included in cloud backups.</li>
+            <li>The application has been tested on one phone model (Android 15).</li>
+          </ul>
+
+          <p class="note">
+            This build is provided for technical evaluation. It has not undergone an independent security audit.
+            It is signed with the developer's release key; the SHA-256 values above let you check that the
+            downloaded file is the original.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>ScanForge · Independent technical demonstration</span>
+      </div>
+    </footer>
+
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged screenshot">
+      <img alt="" />
+      <div class="lightbox-bar">
+        <p></p>
+        <button type="button" aria-label="Close">✕</button>
+      </div>
+    </dialog>
+    <script src="demo.js"></script>
+  </body>
+</html>
